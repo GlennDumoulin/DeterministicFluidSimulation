@@ -636,46 +636,46 @@ Physical Sources:
 1. [Multiplayer Game Programming](book by Joshua Glazer and Sanjay Madhav)  
  --> in-depth explanation of many relevant industry standards, protocols, techniques and more  
  --> describes the process of creating a multiplayer game including connecting players, handling jittering and latency, syncing data and more  
- --> most interesting parts:  
-   |> Chapter 2, The Transport Layer  
-    ==> Explains UDP and TCP
-   |> Chapter 2, The Application Layer  
+ --> accessible online at (https://github.com/kurong00/GameProgramBooks/blob/master/11.Multiplayer%20Game%20Programming/Multiplayer%20Game%20Programming.pdf)  
+ --> Amazon link (https://www.amazon.com/Multiplayer-Game-Programming-Architecting-Networked/dp/0134034309)  
+ --> short description of interesting parts/chapters:  
+   - Chapter 2, The Transport Layer  
+     ==> Explains UDP and TCP
+   - Chapter 2, The Application Layer  
     ==> This layer contains game code
-   |> Chapter 3  
+   - Chapter 3
     ==> Explains Berkeley Socket API and how to create, bind, use,... sockets with it  
 	==> Includes code examples for wrappers for API functions
-   |> Chapter 4  
+   - Chapter 4  
     ==> Explains how to efficiently serialize data to send the most data in the least amount of packets  
 	==> Explains fixed point numbers to save bits when sending floating point numbers of which range and precision limits are known in advance  
 	==> Includes code examples for reading from and writing to a stream of serialized data
-   |> Chapter 5  
+   - Chapter 5  
     ==> Explains Object Replication to identify objects in the networked environment so all clients know which object needs to be created, updated or destroyed based on their networkID  
 	==> Explains RPC's and RMI's which will probably come in handy for my case study to send inputs that need to be handled by the clients  
 	==> Includes code examples for linking objects to a networkID, RPC's,...
-   |> Chapter 6  
+   - Chapter 6  
     ==> Explains two common-used network topologies: client-server and peer-to-peer  
 	==> Explains a technique called input sharing, which I could use by letting each client handle the shared inputs instead of sending results over the network  
 	==> Explains seeding a pseudo-randing number generator for deterministic random number generation across clients  
 	==> Includes code examples for implementing client-server and peer-to-peer
-   |> Chapter 7  
+   - Chapter 7  
     ==> Explains latency, jitter and packet loss  
 	==> Includes code examples for creating a custom reliabability layer on top of UDP
-   |> Chapter 8  
+   - Chapter 8  
     ==> Explains how to handle latency using techniques like client-side interpolation, client-side prediction, move prediction & replay and server side rewind  
 	==> Includes code examples for the techniques explained in this chapter
-   |> Chapter 9  
+   - Chapter 9  
     ==> Explains some approaches of handling scalability such as static zones, server partitioning and prioritizing certain objects or RPC's
-   |> Chapter 10  
+   - Chapter 10  
     ==> Explains ...  
 	==> Includes code examples for ...
-   |> Chapter 11  
+   - Chapter 11  
     ==> Explains ...  
 	==> Includes code examples for ...
-   |> Chapter 12  
+   - Chapter 12  
     ==> Explains ...  
 	==> Includes code examples for ...
-   |> Chapter 13  
+   - Chapter 13  
     ==> Explains ...  
 	==> Includes code examples for ...
- --> accessible online at (https://github.com/kurong00/GameProgramBooks/blob/master/11.Multiplayer%20Game%20Programming/Multiplayer%20Game%20Programming.pdf)  
- --> Amazon link (https://www.amazon.com/Multiplayer-Game-Programming-Architecting-Networked/dp/0134034309)
