@@ -9,12 +9,17 @@
 #pragma kernel Jacobi2
 
 // Common parameter
-float Time;
 float DeltaTime;
 
 // External force
-float2 ForceOrigin;
-float2 ForceVector;
+struct ForceData
+{
+    float2 ForceOrigin;
+    float2 ForceVector;
+};
+
+StructuredBuffer<ForceData> Forces;
+int ForceCount;
 float ForceExponent;
 
 // U (velocity field)
@@ -32,11 +37,6 @@ RWTexture2D<float> DivW_out;
 // P (pressure field)
 Texture2D<float> P_in;
 RWTexture2D<float> P_out;
-
-// Color map
-Texture2D<half4> C_in;
-SamplerState samplerC_in;
-RWTexture2D<half4> C_out;
 
 // Jacobi method arguments
 float Alpha, Beta;
@@ -70,9 +70,15 @@ void Force(uint2 tid : SV_DispatchThreadID)
     W_out.GetDimensions(dim.x, dim.y);
 
     float2 pos = (tid + 0.5 - dim * 0.5) / dim.y;
-    float amp = exp(-ForceExponent * distance(ForceOrigin, pos));
-
-    W_out[tid] = W_in[tid] + ForceVector * amp;
+    float2 totalForce = float2(0, 0);
+    
+    for (int i = 0; i < ForceCount; ++i)
+    {
+        float amp = exp(-ForceExponent * distance(Forces[i].ForceOrigin, pos));
+        totalForce += Forces[i].ForceVector * amp;
+    }
+    
+    W_out[tid] = W_in[tid] + totalForce;
 }
 
 // Setup for Project step (divW calculation)

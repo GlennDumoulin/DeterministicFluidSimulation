@@ -18,30 +18,35 @@ Shader "Hidden/StableFluids"
 
     sampler2D _VelocityField;
 
-    float2 _ForceOrigin;
+    #define MAX_INPUTS 10
+    float4 _ForceOrigins[MAX_INPUTS];
+    int _ForceCount;
     float _ForceExponent;
+
+    float _CurrTime;
+    float _DeltaTime;
 
     half4 frag_advect(v2f_img i) : SV_Target
     {
-        // Time parameters
-        float time = _Time.y;
-        float deltaTime = unity_DeltaTime.x;
-
         // Aspect ratio coefficients
         float2 aspect = float2(_MainTex_TexelSize.y * _MainTex_TexelSize.z, 1);
         float2 aspect_inv = float2(_MainTex_TexelSize.x * _MainTex_TexelSize.w, 1);
 
         // Color advection with the velocity field
-        float2 delta = tex2D(_VelocityField, i.uv).xy * aspect_inv * deltaTime;
+        float2 delta = tex2D(_VelocityField, i.uv).xy * aspect_inv * _DeltaTime;
         float3 color = tex2D(_MainTex, i.uv - delta).xyz;
-
-        // Dye (injection color)
-        float3 dye = saturate(sin(time * float3(2.72, 5.12, 4.98)) + 0.5);
 
         // Blend dye with the color from the buffer.
         float2 pos = (i.uv - 0.5) * aspect;
-        float amp = exp(-_ForceExponent * distance(_ForceOrigin, pos));
-        color = lerp(color, dye, saturate(amp * 100));
+
+        for (int i = 0; i < _ForceCount; ++i)
+        {
+            // Dye (injection color)
+            float3 dye = saturate(sin((_CurrTime + i * 1.53) * float3(2.72, 5.12, 4.98)) + 0.5);
+
+            float amp = exp(-_ForceExponent * distance(_ForceOrigins[i].xy, pos));
+            color = lerp(color, dye, saturate(amp * 100));
+        }
 
         return half4(color, 1);
     }
