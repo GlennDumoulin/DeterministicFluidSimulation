@@ -46,7 +46,7 @@ For the topic discussion I had to learn about the SOTA of my topic and looked at
  --> _DISMISSED_ shallow explanation of implementation in custom engine | Reason: Not Very Usefull
 
 
-I got assigned Alex Vanden Abeele as my supervisor and Kasper Gerooms as my coach.
+I got assigned Alex Vanden Abeele as my supervisor and Kasper Geeroms as my coach.
 
 Some feedback I got during and after my topic discussion with Alex:  
 [My Notes]  
@@ -450,7 +450,7 @@ Back to grad work after a busy weekend. I didn't have much time to really sit do
 
 I noticed that the exam presentation planning went online on Leho, and I will have to go on January 13 at 10:06. This means I am one of the very first ones to have my final presentation. Also means I am one of the first ones to be done with grad work, which for me also means I'm done for this semester early. From today there are exactly 5 weeks remaining until this presentation so I will have to start working a bit harder to meet the deadline.
 
-I did not really meet my expectations today. I was able to make some progress but some other things came up today which needed my attention such as a mail I had to send to my coach Kasper Gerooms about how I should include this learning log into the reflection report because it seems to already be quite a lengthy document.
+I did not really meet my expectations today. I was able to make some progress but some other things came up today which needed my attention such as a mail I had to send to my coach Kasper Geeroms about how I should include this learning log into the reflection report because it seems to already be quite a lengthy document.
 
 Kasper suggested placing an excerpt of my learning log from the past few weeks to give an idea of my logging and add the full document as an appendix in the end. Instead of an appendix I will attach this document itself to the pdf to reduce the length of the document.
 
@@ -514,6 +514,101 @@ Last thing I had to do before submitting the Reflection Report was to create the
 After submitting the assignment I decided to call it quits for today and enjoy a free evening and play a board game with my parents. This does mean I will not have completed everything I had planned for this milestone, but the project setup was a secondary focus in my Time Management for this milestone so it's not that bad.
 
 Tomorrow marks the beginning of the next milestone: the manuscript draft. Although, the first day of the new milestone will not be spent working on the manuscript draft. My goal for tomorrow is to finish the project setup and send the mails to companies for an internship which I also hoped to do somewhere this week but will be moved back a tiny bit.
+
+
+## 16/12
+
+First thing I did today was re-evaluate the tasks I want to-do this during this milestone. The main focus remains working on the manuscript draft, but I also need to finish the project setup and preferably start working on the first steps of the case study.
+
+I finished the project setup and took some time to get more familiar with the code base I will be starting the project from. The last thing I did today was to contact some companies for my internship.
+
+
+## 17/12
+
+I started by configuring the build settings for the project and played a bit with Unity's Profiler to get a better understanding of how it works. This also led me to discover that I will need to create a custom Profiler because I can only profile one instance using Unity's Profiler.
+
+I need to create the custom one before I execute any measurements because all tests need to use the same environment except for the changes we want to compare against each other. So I also spent a bit of time looking into how I can do this.
+
+Final thing I did today was to get started on the manuscript. I didn't do much yet but future work and appendices are ready for now.
+
+
+## 18/12
+
+Today I want to get started on the Literature Review of the Manuscript Draft. First thing to do is decide what topics should be included within this section and in what order I should present them.
+
+Here follows an overview of the topics I want to explain:  
+1. Fluid Simulations
+  - Particle-based Simulations
+  - Grid-based Simulations
+  - GPU Acceleration
+2. Determinism in GPU-based Environments
+  - Determinism
+  - Non-deterministic Floating-point Arithmetic
+  - Fixed-point Arithmetic
+3. Networking
+  - TCP and UDP
+  - Network Topologies
+	- Client-server Architecture
+	- Peer-to-peer Architecture
+  - Networking Challenges
+    - Latency
+	- Packet Loss
+  - Networking in Unity
+4. Synchronization Techniques
+  - State Synchronization
+  - Input Synchronization
+  - Handling Desynchronization
+
+
+## 19/12
+
+I knew the Literature Review would be a lot of work, but I still underestimated how long this would take. I hope to get the draft done before the weekend. I also want to get more progress done on the case study this week so I am deciding to push anything other than the Literature Review for the Manuscript Draft back to the very end of the week and work on the case study after I am done with the Literature Review.
+
+The draft version of the Literature Review will not include any images yet, but hopefully most, if not all, references should be in place. Using my Zotero Library from within Microsoft Word is super helpful because adding a citation automatically updates the references list at the end of the paper following my chosen citation style, IEEE.
+
+
+## 20/12
+
+I really hope to finish the Literature Review today, but it might still be a bit too much work. Any topics not yet drafted by the end of tomorrow will have to wait until after the draft submission because like I said earlier, I really want to get some more progress done on the Case Study this week.
+
+I also don't have that much time to work tomorrow, so I will most likely fail again to reach my goal for this week. This also makes me a bit worried for the research as a whole, because everything that has to move over to the next sprint makes that sprint itself less doable.
+
+
+## 21/12
+
+Like I mentioned yesterday, I didn't have a lot of time to work at all today. I did an activity with my parents and brother for my mom's birthday.
+
+Sadly, once again basically all my time today went to the Literature Review, which luckily is finished now (the draft at least). I found it very difficult to write this part because I struggled a lot with deciding what I should explain more or less and how to paraphrase it to make sure the message is conveyed in a clear way for readers of multiple skill-levels.
+
+Tomorrow, I am finally going to work on the Case Study again and hopefully get a lot of progress to minimize the increase in workload for the next sprint(s).
+
+
+## 22/12
+
+So I finally got started on the Case Study and well, it's for the best because I have been struggling for many hours today with setting up the project to begin with the floating-point measurements. I still haven't figured out how I can combine multiple inputs to be handled in a single dispatch call of the compute shader because somehow when I send all inputs at once, none get handled. I hope that when I finally get it working and I can move on to regular C# scripts again, and not shaders and compute shaders, that things will speed up. Not only do I hope that's the case I pretty much need it to.
+
+I had also hoped to maybe sneak in an introduction and maybe the abstract & keywords for the manuscript draft, but because of the troubles in the Case Study that also didn't happen. I did submit the little bit I have done because at least I can get feedback on the Literature Review.
+
+Looking back at the past milestone period, I don't really know what went so wrong. I did spend a lot of time brainstorming for solutions to newly discovered issues such as the Unity Profiler actually not being what I needed it to be and having a lot more work on the Literature Review than anticipated. I did look into the usability of the Unity Profiler before this milestone but my research was clearly not thorough enough, which could have saved me a lot of time during this milestone.
+
+
+## 23/12
+
+I had my first meeting with a company for my internship and got two more reactions from other companies who intvited me to a first meeting. I'm happy that my internship search is finally starting to get somewhere even if these first couple of companies don't end up working out. The only added difficulty now is that a lot of companies want to do a coding test, which means I have to make time for these tests besides working on this grad work.
+
+There is a lot to do this week if I want to get back on track with my original planning and annoyingly most of today was spent on getting the fluid simulation to work again since it fully broke down yesterday when trying to batch forces in a singular `Dispatch()` call.
+
+The mistake I made took me way more hours than I like to admit but I finally figured it out. Instead of using `VFB.V3 = VFB.V2` I had to use `Graphics.CopyTexture(VFB.V2, VFB.V3)`. The prior approach actually makes both variables share the same texture, which completely broke the updating of the simulation. I thought something was going wrong in the compute shader, so many hours were waisted on debugging something that wasn't even causing issues.
+
+
+## 24/12
+
+I finished up handling multiple inputs in a singular `Dispatch()` call after finally solving the bug yesterday, and then I had to do same in the shader to handle multiple pour inputs. You might be able to guess it, but this also came with some troubles. This time luckily not that bad as with the compute shader.
+
+After that I also made sure that multiple pour inputs would not inject the same dye color into the fluid, by adding an offset to the current time based on the index of the input being handled. This way there is some variation in dies if there are multiple pour inputs, but the results should still be deterministic. Too guarantee deterministic execution order I will need to sort the inputs, potentially based on the client index.
+
+The final thing I began to work on today was the saving of inputs to a file. This way we can later reload the same inputs to test deterministic results and for the accuracy measurements.
+
 
 
 ## References overview
@@ -640,7 +735,7 @@ Physical Sources:
  --> Amazon link (https://www.amazon.com/Multiplayer-Game-Programming-Architecting-Networked/dp/0134034309)  
  --> short description of interesting parts/chapters:  
    - Chapter 2, The Transport Layer  
-     ==> Explains UDP and TCP
+    ==> Explains UDP and TCP
    - Chapter 2, The Application Layer  
     ==> This layer contains game code
    - Chapter 3
@@ -668,14 +763,12 @@ Physical Sources:
    - Chapter 9  
     ==> Explains some approaches of handling scalability such as static zones, server partitioning and prioritizing certain objects or RPC's
    - Chapter 10  
-    ==> Explains ...  
-	==> Includes code examples for ...
+    ==> Explains how to improve security of data transmissions by using encryption, input validation or software cheat detection
    - Chapter 11  
-    ==> Explains ...  
-	==> Includes code examples for ...
+    ==> Explains how Unreal Engine 4 and Unity 5 implement networking into their engines
    - Chapter 12  
-    ==> Explains ...  
-	==> Includes code examples for ...
+    ==> Explains some common features included in gamer services like Steam or PlayStation Network  
+	==> Includes code examples for Steam implementation of matchmaking, networking, stats, achievements,...
    - Chapter 13  
-    ==> Explains ...  
-	==> Includes code examples for ...
+    ==> Introduction to Cloud Hosting using REST API's, JSON and Node.JS  
+	==> Includes code examples for handling processes and virtual machines
