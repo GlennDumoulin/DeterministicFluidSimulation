@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public struct ForceData
@@ -39,10 +38,4 @@ public struct InputData
     {
         return new ForceData(ForceOrigin, ForceVector);
     }
-}
-
-[System.Serializable]
-public class SaveData
-{
-    public List<InputData> Inputs = new List<InputData>();
 }
