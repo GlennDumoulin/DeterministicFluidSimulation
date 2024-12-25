@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public struct ForceData
@@ -12,21 +13,24 @@ public struct ForceData
     }
 }
 
+[System.Serializable]
 public struct InputData
 {
     public Vector2 ForceOrigin;
     public Vector2 ForceVector;
 
-    public uint ExecutionStep;
+    public int ExecutionStep;
+    public int ClientIdx;
 
     public bool IsStirInput;
 
-    public InputData(Vector2 forceOrigin, Vector2 forceVector, uint executionStep, bool isStirInput)
+    public InputData(Vector2 forceOrigin, Vector2 forceVector, int executionStep, int clientIdx, bool isStirInput)
     {
         ForceOrigin = forceOrigin;
         ForceVector = forceVector;
 
         ExecutionStep = executionStep;
+        ClientIdx = clientIdx;
 
         IsStirInput = isStirInput;
     }
@@ -35,4 +39,10 @@ public struct InputData
     {
         return new ForceData(ForceOrigin, ForceVector);
     }
+}
+
+[System.Serializable]
+public class SaveData
+{
+    public List<InputData> Inputs = new List<InputData>();
 }

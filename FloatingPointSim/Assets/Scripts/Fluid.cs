@@ -1,7 +1,9 @@
 ﻿// StableFluids - A GPU implementation of Jos Stam's Stable Fluids on Unity
 // https://github.com/keijiro/StableFluids
 
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -11,11 +13,22 @@ namespace StableFluids
     {
         #region Editable attributes
 
+        [Header("Fluid Settings")]
         [SerializeField] private int _resolution = 512;
         [SerializeField] private float _viscosity = 1e-6f;
         [SerializeField] private float _force = 300;
         [SerializeField] private float _exponent = 200;
         [SerializeField] private Texture2D _initial = null;
+
+        private enum SaveLoadState
+        {
+            None,
+            Saving,
+            Loading,
+        }
+        [Header("Inputs Save/Load Settings")]
+        [SerializeField] private SaveLoadState _saveLoadState = SaveLoadState.None;
+        [SerializeField] private string _customFilename = string.Empty;
 
         #endregion
 
@@ -67,9 +80,11 @@ namespace StableFluids
 
         private const int _jacobiIterarations = 25;
 
+        private int _clientIdx = 0;
+
         // Input Queue variables
-        private uint _currentStep = 0;
-        private const uint _delaySteps = 5;
+        private int _currentStep = -1;
+        private const int _delaySteps = 5;
 
         private List<InputData> _inputQueue = new List<InputData>();
 
@@ -79,6 +94,14 @@ namespace StableFluids
         private ComputeBuffer _forcesBuffer = null;
         private ForceData[] _forces = new ForceData[_maxForces];
         private Vector4[] _pourOrigins = new Vector4[_maxForces];
+
+        // Save/Load variables
+        private const string _defaultFilename = "SavedInputs";
+        private const float _saveFrequency = 1.0f;
+
+        private string _filePath = string.Empty;
+
+        private List<InputData> _saveLoadInputs = new List<InputData>();
 
         // Vector field buffers
         static class VFB
@@ -160,6 +183,37 @@ namespace StableFluids
 
             Graphics.Blit(_initial, _colorRT1);
 
+            if (_saveLoadState != SaveLoadState.None)
+            {
+                // Create the directory, if needed
+                string directory = Path.Combine(Application.persistentDataPath, "Data");
+                Directory.CreateDirectory(directory);
+
+                // Set file path and create the Data directory if needed
+                string filename = ((_customFilename == string.Empty) ? _defaultFilename : _customFilename) + ".json";
+                _filePath = Path.Combine(directory, filename);
+            }
+
+            switch (_saveLoadState)
+            {
+                case SaveLoadState.Saving:
+                {
+                    // Start saving coroutine
+                    StartCoroutine(SaveInputsCoroutine());
+
+                    break;
+                }
+                case SaveLoadState.Loading:
+                {
+                    // Load inputs into queue
+                    LoadInputs();
+
+                    break;
+                }
+                default:
+                    break;
+            }
+
 #if UNITY_IOS
             Application.targetFrameRate = 60;
 #endif
@@ -167,6 +221,14 @@ namespace StableFluids
 
         private void OnDestroy()
         {
+            // Do a final save of the last inputs
+            if (_saveLoadState == SaveLoadState.Saving)
+            {
+                StopCoroutine(nameof(SaveInputsCoroutine));
+                SaveInputs();
+            }
+
+            // Destroy all textures and buffers
             Destroy(_shaderSheet);
 
             Destroy(VFB.V1);
@@ -190,22 +252,37 @@ namespace StableFluids
             float dt = Time.fixedDeltaTime;
             float dx = 1.0f / ResolutionY;
 
-            // Input point
-            Vector2 inputPos = new Vector2(
-                (Input.mousePosition.x - Screen.width * 0.5f) / Screen.height,
-                (Input.mousePosition.y - Screen.height * 0.5f) / Screen.height
-            );
+            // Don't handle new inputs when data was loaded
+            if (_saveLoadState != SaveLoadState.Loading)
+            {
+                // Input point
+                Vector2 inputPos = new Vector2(
+                    (Input.mousePosition.x - Screen.width * 0.5f) / Screen.height,
+                    (Input.mousePosition.y - Screen.height * 0.5f) / Screen.height
+                );
 
-            // Check for new inputs
-            if (Input.GetMouseButton(1))
-            {
-                // Queue Random push input
-                QueueInput(inputPos, _force * 0.025f * Random.insideUnitCircle, false);
+                // Check for new inputs
+                if (Input.GetMouseButton(1))
+                {
+                    // Queue Random push input
+                    QueueInput(inputPos, _force * 0.025f * Random.insideUnitCircle, false);
+                }
+                else if (Input.GetMouseButton(0))
+                {
+                    // Queue Mouse drag input
+                    QueueInput(inputPos, (inputPos - _previousInput) * _force, true);
+                }
+
+                _previousInput = inputPos;
             }
-            else if (Input.GetMouseButton(0))
+            else
             {
-                // Queue Mouse drag input
-                QueueInput(inputPos, (inputPos - _previousInput) * _force, true);
+                // Get the inputs that will be queued this step
+                List<InputData> inputsToQueue = GetQueueableInputs();
+                foreach (InputData input in inputsToQueue)
+                {
+                    QueueLoadedInput(input);
+                }
             }
 
             // Current Time
@@ -309,15 +386,26 @@ namespace StableFluids
             RenderTexture temp = _colorRT1;
             _colorRT1 = _colorRT2;
             _colorRT2 = temp;
-
-            _previousInput = inputPos;
         }
 
         private void QueueInput(Vector2 forceOrigin, Vector2 forceVector, bool isStirInput)
         {
-            InputData newInput = new InputData(forceOrigin, forceVector, _currentStep + _delaySteps, isStirInput);
+            // Create the input
+            InputData newInput = new InputData(
+                forceOrigin, forceVector,
+                _currentStep + _delaySteps,
+                _clientIdx,
+                isStirInput
+            );
 
+            // Add the new input to the queue
             _inputQueue.Add(newInput);
+
+            // Check if we are saving inputs
+            if (_saveLoadState == SaveLoadState.Saving)
+            {
+                _saveLoadInputs.Add(newInput);
+            }
         }
 
         private List<InputData> GetCurrentStepInputs()
@@ -329,6 +417,7 @@ namespace StableFluids
             List<InputData> inputs = _inputQueue
                 .Where(input => input.ExecutionStep <= _currentStep)
                 .OrderBy(input => input.ExecutionStep)
+                .ThenBy(input => input.ClientIdx)
                 .Take(_maxForces).ToList();
 
             // Remove these inputs from the queue
@@ -340,6 +429,82 @@ namespace StableFluids
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
             Graphics.Blit(_colorRT1, destination, _shaderSheet, 1);
+        }
+
+        #endregion
+
+        #region Save/Load Implementation
+
+        private IEnumerator SaveInputsCoroutine()
+        {
+            while (_saveLoadState == SaveLoadState.Saving)
+            {
+                // Wait before saving inputs
+                yield return new WaitForSeconds(_saveFrequency);
+
+                SaveInputs();
+            }
+        }
+
+        private void SaveInputs()
+        {
+            // Check if there are inputs to save
+            if (_saveLoadInputs.Count == 0) return;
+
+            // Get previous saved inputs
+            SaveData saveData = new SaveData();
+            if (File.Exists(_filePath))
+            {
+                string prevInputs = File.ReadAllText(_filePath);
+                saveData = JsonUtility.FromJson<SaveData>(prevInputs);
+            }
+
+            // Append new inputs
+            saveData.Inputs.AddRange(_saveLoadInputs);
+
+            // Get the json for the save file
+            string json = JsonUtility.ToJson(saveData, true);
+
+            // Save the inputs to a file
+            File.WriteAllText(_filePath, json);
+
+            // Clear the list of inputs
+            _saveLoadInputs.Clear();
+        }
+
+        private void LoadInputs()
+        {
+            // Check if the save file exists
+            if (!File.Exists(_filePath)) return;
+
+            // Get the inputs from the save file
+            string json = File.ReadAllText(_filePath);
+            SaveData saveData = JsonUtility.FromJson<SaveData>(json);
+
+            // Add all loaded inputs to be queued
+            _saveLoadInputs.AddRange(saveData.Inputs);
+        }
+
+        private List<InputData> GetQueueableInputs()
+        {
+            // Check if there are inputs to be queued
+            if (_saveLoadInputs.Count == 0) return new List<InputData>();
+
+            // Get the inputs for the current (or a previous) step
+            List<InputData> inputs = _saveLoadInputs
+                .Where(input => input.ExecutionStep - _delaySteps <= _currentStep)
+                .ToList();
+
+            // Remove these inputs from the queue
+            _saveLoadInputs.RemoveAll(input => inputs.Contains(input));
+
+            return inputs;
+        }
+
+        private void QueueLoadedInput(InputData input)
+        {
+            // Add the new input to the queue
+            _inputQueue.Add(input);
         }
 
         #endregion
