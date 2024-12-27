@@ -1,10 +1,10 @@
 ﻿// StableFluids - A GPU implementation of Jos Stam's Stable Fluids on Unity
 // https://github.com/keijiro/StableFluids
 
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace StableFluids
 {
@@ -86,6 +86,8 @@ namespace StableFluids
 
         // Save/Load variables
         private InputSaveLoader _inputSaveLoader = null;
+        private PerformanceProfiler _performanceProfiler = null;
+        private AccuracyProfiler _accuracyProfiler = null;
 
         // Vector field buffers
         static class VFB
@@ -142,6 +144,12 @@ namespace StableFluids
 
             _inputSaveLoader = GetComponent<InputSaveLoader>();
             Assert.IsTrue(_inputSaveLoader);
+
+            _performanceProfiler = GetComponent<PerformanceProfiler>();
+            Assert.IsTrue(_performanceProfiler);
+
+            _accuracyProfiler = GetComponent<AccuracyProfiler>();
+            Assert.IsTrue(_accuracyProfiler);
         }
 
         private void Start()
@@ -234,9 +242,6 @@ namespace StableFluids
                 }
             }
 
-            // Current Time
-            _shaderSheet.SetFloat("_CurrTime", Time.fixedTime);
-
             // Advection
             _compute.SetTexture(Kernels.Advect, "U_in", VFB.V1);
             _compute.SetTexture(Kernels.Advect, "W_out", VFB.V2);
@@ -255,7 +260,7 @@ namespace StableFluids
                 _compute.SetTexture(Kernels.Jacobi2, "X2_in", VFB.V2);
                 _compute.SetTexture(Kernels.Jacobi2, "X2_out", VFB.V3);
                 _compute.Dispatch(Kernels.Jacobi2, ThreadCountX, ThreadCountY, 1);
-
+                
                 _compute.SetTexture(Kernels.Jacobi2, "X2_in", VFB.V3);
                 _compute.SetTexture(Kernels.Jacobi2, "X2_out", VFB.V2);
                 _compute.Dispatch(Kernels.Jacobi2, ThreadCountX, ThreadCountY, 1);
@@ -326,6 +331,7 @@ namespace StableFluids
             }
 
             // Apply the velocity field to the color buffer.
+            _shaderSheet.SetFloat("_CurrTime", dt * _currentStep);
             _shaderSheet.SetTexture("_VelocityField", VFB.V1);
             _shaderSheet.SetVectorArray("_ForceOrigins", _pourOrigins);
             _shaderSheet.SetInteger("_ForceCount", pourCount);
@@ -335,6 +341,22 @@ namespace StableFluids
             RenderTexture temp = _colorRT1;
             _colorRT1 = _colorRT2;
             _colorRT2 = temp;
+
+            // Handle the performance measurement
+            if (_performanceProfiler.IsMeasuring)
+            {
+                _performanceProfiler.MeasurePerformance();
+            }
+
+            // Handle the accuracy measurement
+            if (_accuracyProfiler.IsMeasuring)
+            {
+                // Check if we are measuring this step
+                if (_currentStep == _accuracyProfiler.SaveStep)
+                {
+                    _accuracyProfiler.MeasureAccuracy(VFB.V1, _colorRT1);
+                }
+            }
         }
 
         private void QueueInput(Vector2 forceOrigin, Vector2 forceVector, bool isStirInput)

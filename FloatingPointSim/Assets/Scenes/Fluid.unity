@@ -192,6 +192,8 @@ GameObject:
   - component: {fileID: 1163476469}
   - component: {fileID: 1163476468}
   - component: {fileID: 1163476466}
+  - component: {fileID: 1163476471}
+  - component: {fileID: 1163476472}
   - component: {fileID: 1163476470}
   m_Layer: 0
   m_Name: Main Camera
@@ -298,6 +300,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _saveLoadState: 0
+  _overwriteInputs: 1
+  _customFilename: FloatingPoint
+--- !u!114 &1163476471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163476465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f04a7651696b0846a0f5604ca33dcce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shouldMeasure: 0
+  _customFilename: 
+--- !u!114 &1163476472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163476465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c726c0bc4060da45aab6974a0d56daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shouldMeasure: 0
+  _saveAfterSeconds: 20
   _customFilename: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

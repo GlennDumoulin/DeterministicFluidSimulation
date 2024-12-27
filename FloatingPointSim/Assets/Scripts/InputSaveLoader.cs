@@ -22,6 +22,7 @@ public class InputSaveLoader : MonoBehaviour
     [SerializeField] private SaveLoadState _saveLoadState = SaveLoadState.None;
     public SaveLoadState GetState() { return _saveLoadState; }
 
+    [SerializeField] private bool _overwriteInputs = true;
     [SerializeField] private string _customFilename = string.Empty;
 
     // Save/Load variables
@@ -40,7 +41,7 @@ public class InputSaveLoader : MonoBehaviour
             string directory = Path.Combine(Application.persistentDataPath, "Data");
             Directory.CreateDirectory(directory);
 
-            // Set file path and create the Data directory if needed
+            // Set file path
             string filename = ((_customFilename == string.Empty) ? _defaultFilename : _customFilename) + ".json";
             _filePath = Path.Combine(directory, filename);
         }
@@ -49,6 +50,12 @@ public class InputSaveLoader : MonoBehaviour
         {
             case SaveLoadState.Saving:
                 {
+                    // Make sure the measurements start from an empty file
+                    if (_overwriteInputs && File.Exists(_filePath))
+                    {
+                        File.Delete(_filePath);
+                    }
+
                     // Start saving coroutine
                     StartCoroutine(SaveInputsCoroutine());
 
