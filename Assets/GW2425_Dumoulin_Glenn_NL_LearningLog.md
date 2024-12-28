@@ -43,7 +43,7 @@ For the topic discussion I had to learn about the SOTA of my topic and looked at
  --> explains client-side prediction
 
 6. [Networked Physics](https://www.simoneriksson.com/networked-physics) | Search Terms: Networked Physics  
- --> _DISMISSED_ shallow explanation of implementation in custom engine | Reason: Not Very Usefull
+ --> _DISMISSED_ shallow explanation of implementation in custom engine | Reason: Not Very Useful
 
 
 I got assigned Alex Vanden Abeele as my supervisor and Kasper Geeroms as my coach.
@@ -610,6 +610,37 @@ After that I also made sure that multiple pour inputs would not inject the same 
 The final thing I began to work on today was the saving of inputs to a file. This way we can later reload the same inputs to test deterministic results and for the accuracy measurements.
 
 
+## 25/12
+
+Short update today, I finished implementing the system to save and load inputs to and from a file. This sounds like a nice-to-have but is very useful when testing for determinism and accuracy.
+
+I also spent a bit of time thinking about my coding test that I have to make and took a little bit of time to look up the company I have an interview with tomorrow.
+
+It will be a couple of very hard-working and focussed days this week but I think I am starting to think of a planning that could get me back on track a bit with my original planning. Of course I have thought this many times before during this project and those times it didn't really turn out great.
+
+
+## 26/12 & 27/12
+
+The past two days I have been working on the implementation of a custom profiler for measuring CPU & GPU Frame Time, as well as implementing the logging of the fluid state after X amount of seconds. I took a wrong approach for both tasks because I, once again, didn't have a lot of prior knowledge on how to tackle this.
+
+I tried using a stopwatch method for measuring CPU time and AsyncGPUReadback for the GPU time. This approach took a while to implement and once I got the point of testing GPU timing it appeared that it didn't want to work. I looked up alternatives and after a bit I actually discovered Unity's ProfilerRecorders, which actually covers what I was trying to achieve but much easier to use.
+
+Then for the logging of the fluid state, the first thing I needed to do was to learn how to get data from RenderTextures. After that, most of the implementation went pretty smooth, except for checking if the data was actually logged correctly to the file. This was because the amount of data logged was so enormous that it ended up being nearly 14 million lines of formatted json. When looking into this, I quickly found out I actually appended new data to old files instead of overwriting them so this reduced the file size a bit, but not that much. In the end, I decided to not log every element but rather take a sample of the velocities and colors of that fluid state. I did this by only logging the state of the elements of every 4th row and column, greatly reducing the file size and logging speed.
+
+I had hoped to be working on the fixed-point implementation by now, but first thing tomorrow is to finally handle the first measurements, and then I can, after way too long, begin with the actual research of this project.
+
+
+## 28/12
+
+So today started with taking all kinds of measurements of the project in it's current state, with every measurement being repeated 10 times. These measurements are performance for loaded inputs & for unique inputs, and accuracy after 5, 10 & 20 seconds of loaded inputs. Loaded inputs means that all 10 measurements execute the same inputs on the fluid, which means the results should be as close to each other as possible. For accuracy this should ideally mean that there are not differences at all in velocities and colors. Unique inputs means that all 10 measurements use inputs from the connected clients.
+
+After taking all the measurements, I started importing the data into Excel to analyze the results, but it quickly became clear that this method would not work well. Getting the data ready for analysis would take very long, considering it had to be done for every file and is a very manual workload. Instead I asked ChatGPT for an alternative and it suggested creating a python script to run through command line and handling the results and calculating averages using the python script. This approach automates most of the process, so the coming measurements will be analyzed much quicker, but of course making the python scripts took some time away from the rest of the project.
+
+I have not really documented any findings from these results but I did take a look at them and I was glad to see that the results were as expected in some form. For example when measuring accuracy after 5, 10 & 20 seconds using floating-point values, the expected result is that there would me more and bigger differences if the simulation has been running for longer because of rounding errors. This expectation is also visible in the actual results of the measurements. For performance, I didn't really have any expectations but I have to say that I was shocked to see an average GPU frame time of 0.07ms. Of course I know GPU's are extremely fast and great for parallel tasks, but an average of not even a tenth of a milliesecond is not what I expected at all.
+
+The round of today I duplicated the project and started working on implementing fixed-point arithmetic. The reason why I duplicate the project and not just keep on using the current one is to have the end state for floating-point measurement always available in case someone who were to read the paper wants to verify the results I got, or continue upon a certain step in my research.
+
+
 
 ## References overview
 
@@ -657,7 +688,7 @@ Online Sources:
  --> explains client-side prediction
 
 6. [Networked Physics](https://www.simoneriksson.com/networked-physics) | Search Terms: Networked Physics  
- --> _DISMISSED_ shallow explanation of implementation in custom engine | Reason: Not Very Usefull
+ --> _DISMISSED_ shallow explanation of implementation in custom engine | Reason: Not Very Useful
 
 7. [But How DO Fluid Simulations Work?](https://youtu.be/qsYE1wMEMPA?si=vn8H7uEYsQaBL4Sk) | Search Terms: how do fluid simulations work  
  --> explains how fluid simulations work using Navier-Stokes Equations, Diffusion & Advection whilst also Clearing Divergence
