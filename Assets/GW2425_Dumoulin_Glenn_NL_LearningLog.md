@@ -641,6 +641,42 @@ I have not really documented any findings from these results but I did take a lo
 The round of today I duplicated the project and started working on implementing fixed-point arithmetic. The reason why I duplicate the project and not just keep on using the current one is to have the end state for floating-point measurement always available in case someone who were to read the paper wants to verify the results I got, or continue upon a certain step in my research.
 
 
+## 29/12 & 30/12
+
+During these past two days I have been continuing the implementation of fixed-point arithmetic everywhere (script, shader & compute shader). The implementation in the C# script went pretty smooth, but the shaders gave me more troubles. However, this is most likely because of my lack of knowledge of how to work with these sorts of files and programming languages.
+
+I think I am finally close to being done but I am encountering some issues with finding the right fractional split for the fixed numbers. Some numbers are too large and overflow because the fixed number can't represent that range of values, and some numbers become zero because the precision isn't high enough.
+
+
+## 31/12 - 2/01
+
+Because of the holidays and family visits during these days, I won't have much time to work on projects. So I decided to use these couple of days to make the coding test I still had to do.
+
+I think I put a bit too much time into this coding test because I had hoped to spend one day less on it. This of course means that now I only have 3 days left before the test presentation of my Grad Work and I still haven't solved the fixed-point issues, let alone began working on the networking which is actually the core of what I wanted to do some research around. I am stressing a lot, and a bit mroe every day that gets closer to the deadline.
+
+During the last 3 days before the test presentation I should try my hardest to get the networking in place and of course prepare the presentation itself. To achieve this, I will need to drop the measurements with incrementing the number of connected clients. Maybe I can still do them next week, but I will most likely need that last week to finish the paper and all the other deliverables.
+
+
+## 3/01
+
+Finally back to working on the Grad Work project. Today I hope to solve my fixed-point issues, handle the fixed-point measurements and also get started on the networking implementation.
+
+Well the hope was there. But 10 hours, of trying to get to fixed-points to work, later that hope is a distant memory for today. I thought that maybe the couple days of Grad Work break by working on my coding test would have helped me to restart with a fresh look on the situation. Every day that passes and the deadlines for the test presentation and the final deadline are getting closer, and the remaining workload for the project keeps getting bigger. I feel really defeated by the end of each day, and when I eventually decide to stop for the day and go to sleep, I can't put my mind to rest because of the daunting feeling of failure.
+
+It just seems like no matter what I try, I can't get a grasp of what is going wrong and even worse where it's going wrong. I never expected the fixed-point implementation to take this long, but I did include something similar in the risk analysis of my reflection report a while ago. There I stated "Ensuring deterministic simulation results across devices/instances might be harder than anticipated.", now in this case it has nothing to do with devices/instances but the purpose of fixed-point arithmetic is to ensure deterministic simulation results. The response I suggested to that risk was "Pivot the research focus toward creating a deterministic fluid simulation without the networking aspect." and of course the impact of this risk is marked as catastrophic because networking is the core of this research project.
+
+Since I don't have much time left, maybe this is what I will need to do. We'll see what tomorrow brings.
+
+
+## 4/01
+
+After yet another long day of failed attempts, I have decided to take a backup of my current attempt and revert the actual project files back to a version before fixed-point implementation. Yes, I am basically starting over but this is something I feel like I should have done a long time ago already. Only my stubborness wouldn't let me. I know this means there will definitely be no networking possible for the test presentation because I really need to devote tomorrow to making the actual presentation so I at least have something to present and can hopefully get some meaningful feedback even though the project isn't as expected.
+
+It took a decent amount of hours but restarting the fixed-point implementation worked out. I finally got it working, although it should be noted that it's not the correct way of using fixed-point arithmetic. The values are either too large of too small to be representable, I think I know a solution for this problem but it would add a lot more complexity to the fixed-point implementation. The solution I have in mind is to have multiple types of fixed-point structures using different amounts of fractional bits. The added complexity comes with the mathematic operations (+,-,\*,/). These operations require both operands to have the same scaling factor, so there would be extra fixed-point conversions that need to happen before the operations are possible.
+
+Now I don't have time to even try to figure this out, so the method I applied was to not really use fixed-point arithmetic but rather convert all values to a fixed-point and back to a float. This works for rounding values that are too small to be represented, but I'm not sure how deterministic this approach is across different cpu/gpu architectures.
+
+
 
 ## References overview
 
