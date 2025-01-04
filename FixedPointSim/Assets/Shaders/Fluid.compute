@@ -8,6 +8,35 @@
 #pragma kernel Jacobi1
 #pragma kernel Jacobi2
 
+// Fixed-Point Constants
+#define FRACTIONAL_BITS 22
+#define SCALING_FACTOR (1 << FRACTIONAL_BITS)
+#define FIXED_ONE SCALING_FACTOR // Represent 1.0 in fixed-point
+
+// Fixed-Point Conversion Functions
+#define ToFixed(x) ((int)((x) * SCALING_FACTOR))
+#define ToFloat(x) ((float)(x) / SCALING_FACTOR)
+#define ToFixedFloat(x) (ToFloat(ToFixed(x)))
+
+#define ToFixed2(v) (int2(ToFixed(v.x), ToFixed(v.y)))
+#define ToFloat2(v) (float2(ToFloat(v.x), ToFloat(v.y)))
+#define ToFixedFloat2(v) (ToFloat2(ToFixed2(v)))
+
+// Fixed-Point Arithmetic Operations
+//#define FAdd(a, b) ((int)((a) + (b)))
+//#define FSub(a, b) ((int)((a) - (b)))
+//#define FMul(a, b) ((int)(((a) * (b)) >> FRACTIONAL_BITS))
+//#define FDiv(a, b) ((int)(((a) << FRACTIONAL_BITS) / (b)))
+
+//#define FAdd2_S(a, b) (int2(FAdd(a.x, b), FAdd(a.y, b)))
+//#define FAdd2_V(a, b) (int2(FAdd(a.x, b.x), FAdd(a.y, b.y)))
+//#define FSub2_S(a, b) (int2(FSub(a.x, b), FSub(a.y, b)))
+//#define FSub2_V(a, b) (int2(FSub(a.x, b.x), FSub(a.y, b.y)))
+//#define FMul2_S(a, b) (int2(FMul(a.x, b), FMul(a.y, b)))
+//#define FMul2_V(a, b) (int2(FMul(a.x, b.x), FMul(a.y, b.y)))
+//#define FDiv2_S(a, b) (int2(FDiv(a.x, b), FDiv(a.y, b)))
+//#define FDiv2_V(a, b) (int2(FDiv(a.x, b.y), FDiv(a.y, b.y)))
+
 // Common parameter
 float DeltaTime;
 
@@ -57,9 +86,12 @@ void Advect(uint2 tid : SV_DispatchThreadID)
     W_out.GetDimensions(dim.x, dim.y);
 
     float2 uv = (tid + 0.5) / dim;
-    float2 duv = U_in[tid] * float2((float)dim.y / dim.x, 1) * DeltaTime;
+    uv = ToFixedFloat2(uv);
+    float2 duv = U_in[tid] * ToFixedFloat2(float2((float)dim.y / dim.x, 1)) * ToFixedFloat(DeltaTime);
+    duv = ToFixedFloat2(duv);
 
-    W_out[tid] = U_in.SampleLevel(samplerU_in, uv - duv, 0);
+    float2 wOut = U_in.SampleLevel(samplerU_in, uv - duv, 0);
+    W_out[tid] = ToFixedFloat2(wOut);
 }
 
 // Add-force step
@@ -70,15 +102,21 @@ void Force(uint2 tid : SV_DispatchThreadID)
     W_out.GetDimensions(dim.x, dim.y);
 
     float2 pos = (tid + 0.5 - dim * 0.5) / dim.y;
+    pos = ToFixedFloat2(pos);
     float2 totalForce = float2(0, 0);
     
     for (int i = 0; i < ForceCount; ++i)
     {
-        float amp = exp(-ForceExponent * distance(Forces[i].ForceOrigin, pos));
-        totalForce += Forces[i].ForceVector * amp;
+        float amp = exp(
+            ToFixedFloat(-ForceExponent) *
+            ToFixedFloat(distance(ToFixedFloat2(Forces[i].ForceOrigin), pos))
+        );
+        amp = ToFixedFloat(amp);
+        totalForce += ToFixedFloat2(Forces[i].ForceVector) * amp;
     }
     
-    W_out[tid] = W_in[tid] + totalForce;
+    float2 wOut = W_in[tid] + totalForce;
+    W_out[tid] = ToFixedFloat2(wOut);
 }
 
 // Setup for Project step (divW calculation)
@@ -88,8 +126,9 @@ void PSetup(uint2 tid : SV_DispatchThreadID)
     uint2 dim;
     W_in.GetDimensions(dim.x, dim.y);
 
-    DivW_out[tid] = (W_in[tid + int2(1, 0)].x - W_in[tid - int2(1, 0)].x +
-                     W_in[tid + int2(0, 1)].y - W_in[tid - int2(0, 1)].y) * dim.y / 2;
+    float divWOut = ToFixedFloat(W_in[tid + int2(1, 0)].x - W_in[tid - int2(1, 0)].x +
+                    W_in[tid + int2(0, 1)].y - W_in[tid - int2(0, 1)].y) * ToFixedFloat(dim.y / 2);
+    DivW_out[tid] = ToFixedFloat(divWOut);
 
     P_out[tid] = 0;
 }
@@ -107,8 +146,9 @@ void PFinish(uint2 tid : SV_DispatchThreadID)
     float P2 = P_in[min(tid + int2(1, 0), dim - 2)];
     float P3 = P_in[max(tid - int2(0, 1), 1)];
     float P4 = P_in[min(tid + int2(0, 1), dim - 2)];
-
-    float2 u = W_in[tid] - float2(P2 - P1, P4 - P3) * dim.y / 2;
+    
+    float2 u = W_in[tid] - ToFixedFloat2(float2(P2 - P1, P4 - P3)) * ToFixedFloat(dim.y / 2);
+    u = ToFixedFloat2(u);
 
     U_out[tid] = u;
 
@@ -122,14 +162,18 @@ void PFinish(uint2 tid : SV_DispatchThreadID)
 [numthreads(8, 8, 1)]
 void Jacobi1(uint2 tid : SV_DispatchThreadID)
 {
-    X1_out[tid] = (X1_in[tid - int2(1, 0)] + X1_in[tid + int2(1, 0)] +
-                   X1_in[tid - int2(0, 1)] + X1_in[tid + int2(0, 1)] + Alpha * B1_in[tid]) / Beta;
+    float x1Out = (X1_in[tid - int2(1, 0)] + X1_in[tid + int2(1, 0)] +
+                    X1_in[tid - int2(0, 1)] + X1_in[tid + int2(0, 1)] +
+                    ToFixedFloat(ToFixedFloat(Alpha) * B1_in[tid])) / ToFixedFloat(Beta);
+    X1_out[tid] = ToFixedFloat(x1Out);
 }
 
 // Jacobi method with a vector field
 [numthreads(8, 8, 1)]
 void Jacobi2(uint2 tid : SV_DispatchThreadID)
 {
-    X2_out[tid] = (X2_in[tid - int2(1, 0)] + X2_in[tid + int2(1, 0)] +
-                   X2_in[tid - int2(0, 1)] + X2_in[tid + int2(0, 1)] + Alpha * B2_in[tid]) / Beta;
+    float2 x2Out = (X2_in[tid - int2(1, 0)] + X2_in[tid + int2(1, 0)] +
+                    X2_in[tid - int2(0, 1)] + X2_in[tid + int2(0, 1)] +
+                    ToFixedFloat2(ToFixedFloat(Alpha) * B2_in[tid])) / ToFixedFloat(Beta);
+    X2_out[tid] = ToFixedFloat2(x2Out);
 }

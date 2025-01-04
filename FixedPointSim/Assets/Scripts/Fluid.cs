@@ -67,6 +67,9 @@ namespace StableFluids
         private int ResolutionX { get; set; }
         private int ResolutionY { get; set; }
 
+        private float _dxSqr = 0.0f;
+        private float _dt = 0.0f;
+
         private const int _jacobiIterarations = 25;
 
         private int _clientIdx = 0;
@@ -142,6 +145,16 @@ namespace StableFluids
         {
             ValidateResolution();
 
+            // Convert const floating-point values to fixed-point and back
+            _viscosity = FixedPoint.FixedFloat(_viscosity);
+            _force = FixedPoint.FixedFloat(_force);
+            _exponent = FixedPoint.FixedFloat(_exponent);
+
+            float dx = FixedPoint.FixedFloat(1.0f / ResolutionY);
+            _dxSqr = FixedPoint.FixedFloat(dx * dx);
+            _dt = FixedPoint.FixedFloat(Time.fixedDeltaTime);
+
+            // Check for required components
             _inputSaveLoader = GetComponent<InputSaveLoader>();
             Assert.IsTrue(_inputSaveLoader);
 
@@ -157,8 +170,8 @@ namespace StableFluids
             // Initialize compute shader and shader sheet
             _shaderSheet = new Material(_shader);
 
-            _compute.SetFloat("DeltaTime", Time.fixedDeltaTime);
-            _shaderSheet.SetFloat("_DeltaTime", Time.fixedDeltaTime);
+            _compute.SetFloat("DeltaTime", _dt);
+            _shaderSheet.SetFloat("_DeltaTime", _dt);
 
             _compute.SetFloat("ForceExponent", _exponent);
             _shaderSheet.SetFloat("_ForceExponent", _exponent);
@@ -205,10 +218,6 @@ namespace StableFluids
             // Increase current step
             ++_currentStep;
 
-            // Get Delta values
-            float dt = Time.fixedDeltaTime;
-            float dx = 1.0f / ResolutionY;
-
             // Don't handle new inputs when data was loaded
             if (_inputSaveLoader.GetState() != InputSaveLoader.SaveLoadState.Loading)
             {
@@ -222,12 +231,20 @@ namespace StableFluids
                 if (Input.GetMouseButton(1))
                 {
                     // Queue Random push input
-                    QueueInput(inputPos, _force * 0.025f * Random.insideUnitCircle, false);
+                    QueueInput(
+                        FixedVector2.FixedFloats(inputPos),
+                        FixedVector2.FixedFloats(_force * 0.025f * Random.insideUnitCircle),
+                        false
+                    );
                 }
                 else if (Input.GetMouseButton(0))
                 {
                     // Queue Mouse drag input
-                    QueueInput(inputPos, (inputPos - _previousInput) * _force, true);
+                    QueueInput(
+                        FixedVector2.FixedFloats(inputPos),
+                        FixedVector2.FixedFloats((inputPos - _previousInput) * _force),
+                        true
+                    );
                 }
 
                 _previousInput = inputPos;
@@ -248,7 +265,7 @@ namespace StableFluids
             _compute.Dispatch(Kernels.Advect, ThreadCountX, ThreadCountY, 1);
 
             // Diffuse setup
-            float dif_alpha = dx * dx / (_viscosity * dt);
+            float dif_alpha = FixedPoint.FixedFloat(_dxSqr / (_viscosity * _dt));
             _compute.SetFloat("Alpha", dif_alpha);
             _compute.SetFloat("Beta", 4 + dif_alpha);
             Graphics.CopyTexture(VFB.V2, VFB.V1);
@@ -300,7 +317,7 @@ namespace StableFluids
             _compute.Dispatch(Kernels.PSetup, ThreadCountX, ThreadCountY, 1);
 
             // Jacobi iteration
-            _compute.SetFloat("Alpha", -dx * dx);
+            _compute.SetFloat("Alpha", -_dxSqr);
             _compute.SetFloat("Beta", 4);
             _compute.SetTexture(Kernels.Jacobi1, "B1_in", VFB.V2);
 
@@ -331,7 +348,7 @@ namespace StableFluids
             }
 
             // Apply the velocity field to the color buffer.
-            _shaderSheet.SetFloat("_CurrTime", dt * _currentStep);
+            _shaderSheet.SetFloat("_CurrTime", FixedPoint.FixedFloat(_dt * _currentStep));
             _shaderSheet.SetTexture("_VelocityField", VFB.V1);
             _shaderSheet.SetVectorArray("_ForceOrigins", _pourOrigins);
             _shaderSheet.SetInteger("_ForceCount", pourCount);
