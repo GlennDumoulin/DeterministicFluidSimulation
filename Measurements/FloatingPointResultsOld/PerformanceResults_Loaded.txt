@@ -1,0 +1,44 @@
+PerformanceData\Performance_Loaded_0.json:
+  CPU Average Frame Time: 1.08353ms
+  GPU Average Frame Time: 0.06511ms
+
+PerformanceData\Performance_Loaded_1.json:
+  CPU Average Frame Time: 1.08081ms
+  GPU Average Frame Time: 0.06569ms
+
+PerformanceData\Performance_Loaded_2.json:
+  CPU Average Frame Time: 1.08816ms
+  GPU Average Frame Time: 0.06578ms
+
+PerformanceData\Performance_Loaded_3.json:
+  CPU Average Frame Time: 1.08749ms
+  GPU Average Frame Time: 0.06565ms
+
+PerformanceData\Performance_Loaded_4.json:
+  CPU Average Frame Time: 1.10618ms
+  GPU Average Frame Time: 0.06579ms
+
+PerformanceData\Performance_Loaded_5.json:
+  CPU Average Frame Time: 1.10032ms
+  GPU Average Frame Time: 0.06568ms
+
+PerformanceData\Performance_Loaded_6.json:
+  CPU Average Frame Time: 1.10844ms
+  GPU Average Frame Time: 0.06592ms
+
+PerformanceData\Performance_Loaded_7.json:
+  CPU Average Frame Time: 1.11156ms
+  GPU Average Frame Time: 0.06637ms
+
+PerformanceData\Performance_Loaded_8.json:
+  CPU Average Frame Time: 1.11194ms
+  GPU Average Frame Time: 0.06577ms
+
+PerformanceData\Performance_Loaded_9.json:
+  CPU Average Frame Time: 1.09840ms
+  GPU Average Frame Time: 0.06526ms
+
+
+Final Averages:
+  Final CPU Average Frame Time: 1.09801ms
+  Final GPU Average Frame Time: 0.06569ms

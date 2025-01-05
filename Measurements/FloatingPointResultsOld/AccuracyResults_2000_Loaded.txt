@@ -1,0 +1,184 @@
+Comparison between AccuracyData\Accuracy_2000_Loaded_0.json and AccuracyData\Accuracy_2000_Loaded_1.json:
+  Average Velocity Difference: 0.00052
+  Average Color Difference: 0.00605
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_0.json and AccuracyData\Accuracy_2000_Loaded_2.json:
+  Average Velocity Difference: 0.00054
+  Average Color Difference: 0.00697
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_0.json and AccuracyData\Accuracy_2000_Loaded_3.json:
+  Average Velocity Difference: 0.00079
+  Average Color Difference: 0.00931
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_0.json and AccuracyData\Accuracy_2000_Loaded_4.json:
+  Average Velocity Difference: 0.00021
+  Average Color Difference: 0.00304
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_0.json and AccuracyData\Accuracy_2000_Loaded_5.json:
+  Average Velocity Difference: 0.00054
+  Average Color Difference: 0.00696
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_0.json and AccuracyData\Accuracy_2000_Loaded_6.json:
+  Average Velocity Difference: 0.00061
+  Average Color Difference: 0.00706
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_0.json and AccuracyData\Accuracy_2000_Loaded_7.json:
+  Average Velocity Difference: 0.00074
+  Average Color Difference: 0.00834
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_0.json and AccuracyData\Accuracy_2000_Loaded_8.json:
+  Average Velocity Difference: 0.00050
+  Average Color Difference: 0.00631
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_0.json and AccuracyData\Accuracy_2000_Loaded_9.json:
+  Average Velocity Difference: 0.00086
+  Average Color Difference: 0.00988
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_1.json and AccuracyData\Accuracy_2000_Loaded_2.json:
+  Average Velocity Difference: 0.00035
+  Average Color Difference: 0.00402
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_1.json and AccuracyData\Accuracy_2000_Loaded_3.json:
+  Average Velocity Difference: 0.00032
+  Average Color Difference: 0.00418
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_1.json and AccuracyData\Accuracy_2000_Loaded_4.json:
+  Average Velocity Difference: 0.00037
+  Average Color Difference: 0.00423
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_1.json and AccuracyData\Accuracy_2000_Loaded_5.json:
+  Average Velocity Difference: 0.00037
+  Average Color Difference: 0.00424
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_1.json and AccuracyData\Accuracy_2000_Loaded_6.json:
+  Average Velocity Difference: 0.00032
+  Average Color Difference: 0.00422
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_1.json and AccuracyData\Accuracy_2000_Loaded_7.json:
+  Average Velocity Difference: 0.00028
+  Average Color Difference: 0.00381
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_1.json and AccuracyData\Accuracy_2000_Loaded_8.json:
+  Average Velocity Difference: 0.00031
+  Average Color Difference: 0.00379
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_1.json and AccuracyData\Accuracy_2000_Loaded_9.json:
+  Average Velocity Difference: 0.00042
+  Average Color Difference: 0.00551
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_2.json and AccuracyData\Accuracy_2000_Loaded_3.json:
+  Average Velocity Difference: 0.00043
+  Average Color Difference: 0.00483
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_2.json and AccuracyData\Accuracy_2000_Loaded_4.json:
+  Average Velocity Difference: 0.00037
+  Average Color Difference: 0.00484
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_2.json and AccuracyData\Accuracy_2000_Loaded_5.json:
+  Average Velocity Difference: 0.00006
+  Average Color Difference: 0.00069
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_2.json and AccuracyData\Accuracy_2000_Loaded_6.json:
+  Average Velocity Difference: 0.00043
+  Average Color Difference: 0.00537
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_2.json and AccuracyData\Accuracy_2000_Loaded_7.json:
+  Average Velocity Difference: 0.00043
+  Average Color Difference: 0.00514
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_2.json and AccuracyData\Accuracy_2000_Loaded_8.json:
+  Average Velocity Difference: 0.00021
+  Average Color Difference: 0.00268
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_2.json and AccuracyData\Accuracy_2000_Loaded_9.json:
+  Average Velocity Difference: 0.00055
+  Average Color Difference: 0.00651
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_3.json and AccuracyData\Accuracy_2000_Loaded_4.json:
+  Average Velocity Difference: 0.00063
+  Average Color Difference: 0.00735
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_3.json and AccuracyData\Accuracy_2000_Loaded_5.json:
+  Average Velocity Difference: 0.00044
+  Average Color Difference: 0.00498
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_3.json and AccuracyData\Accuracy_2000_Loaded_6.json:
+  Average Velocity Difference: 0.00027
+  Average Color Difference: 0.00307
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_3.json and AccuracyData\Accuracy_2000_Loaded_7.json:
+  Average Velocity Difference: 0.00015
+  Average Color Difference: 0.00211
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_3.json and AccuracyData\Accuracy_2000_Loaded_8.json:
+  Average Velocity Difference: 0.00038
+  Average Color Difference: 0.00480
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_3.json and AccuracyData\Accuracy_2000_Loaded_9.json:
+  Average Velocity Difference: 0.00027
+  Average Color Difference: 0.00381
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_4.json and AccuracyData\Accuracy_2000_Loaded_5.json:
+  Average Velocity Difference: 0.00037
+  Average Color Difference: 0.00488
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_4.json and AccuracyData\Accuracy_2000_Loaded_6.json:
+  Average Velocity Difference: 0.00055
+  Average Color Difference: 0.00671
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_4.json and AccuracyData\Accuracy_2000_Loaded_7.json:
+  Average Velocity Difference: 0.00060
+  Average Color Difference: 0.00690
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_4.json and AccuracyData\Accuracy_2000_Loaded_8.json:
+  Average Velocity Difference: 0.00038
+  Average Color Difference: 0.00494
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_4.json and AccuracyData\Accuracy_2000_Loaded_9.json:
+  Average Velocity Difference: 0.00071
+  Average Color Difference: 0.00848
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_5.json and AccuracyData\Accuracy_2000_Loaded_6.json:
+  Average Velocity Difference: 0.00048
+  Average Color Difference: 0.00566
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_5.json and AccuracyData\Accuracy_2000_Loaded_7.json:
+  Average Velocity Difference: 0.00046
+  Average Color Difference: 0.00531
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_5.json and AccuracyData\Accuracy_2000_Loaded_8.json:
+  Average Velocity Difference: 0.00025
+  Average Color Difference: 0.00298
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_5.json and AccuracyData\Accuracy_2000_Loaded_9.json:
+  Average Velocity Difference: 0.00057
+  Average Color Difference: 0.00671
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_6.json and AccuracyData\Accuracy_2000_Loaded_7.json:
+  Average Velocity Difference: 0.00026
+  Average Color Difference: 0.00300
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_6.json and AccuracyData\Accuracy_2000_Loaded_8.json:
+  Average Velocity Difference: 0.00032
+  Average Color Difference: 0.00389
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_6.json and AccuracyData\Accuracy_2000_Loaded_9.json:
+  Average Velocity Difference: 0.00036
+  Average Color Difference: 0.00425
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_7.json and AccuracyData\Accuracy_2000_Loaded_8.json:
+  Average Velocity Difference: 0.00034
+  Average Color Difference: 0.00433
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_7.json and AccuracyData\Accuracy_2000_Loaded_9.json:
+  Average Velocity Difference: 0.00026
+  Average Color Difference: 0.00348
+
+Comparison between AccuracyData\Accuracy_2000_Loaded_8.json and AccuracyData\Accuracy_2000_Loaded_9.json:
+  Average Velocity Difference: 0.00045
+  Average Color Difference: 0.00545
+
+
+Final Averages:
+  Overall Average Velocity Difference: 0.00041
+  Overall Average Color Difference: 0.00504

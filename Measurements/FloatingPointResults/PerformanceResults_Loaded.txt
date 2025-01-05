@@ -1,44 +1,44 @@
 PerformanceData\Performance_Loaded_0.json:
-  CPU Average Frame Time: 1.08353ms
-  GPU Average Frame Time: 0.06511ms
+  CPU Average Frame Time: 0.46828ms
+  GPU Average Frame Time: 0.01908ms
 
 PerformanceData\Performance_Loaded_1.json:
-  CPU Average Frame Time: 1.08081ms
-  GPU Average Frame Time: 0.06569ms
+  CPU Average Frame Time: 0.46839ms
+  GPU Average Frame Time: 0.01910ms
 
 PerformanceData\Performance_Loaded_2.json:
-  CPU Average Frame Time: 1.08816ms
-  GPU Average Frame Time: 0.06578ms
+  CPU Average Frame Time: 0.48286ms
+  GPU Average Frame Time: 0.01897ms
 
 PerformanceData\Performance_Loaded_3.json:
-  CPU Average Frame Time: 1.08749ms
-  GPU Average Frame Time: 0.06565ms
+  CPU Average Frame Time: 0.46509ms
+  GPU Average Frame Time: 0.01913ms
 
 PerformanceData\Performance_Loaded_4.json:
-  CPU Average Frame Time: 1.10618ms
-  GPU Average Frame Time: 0.06579ms
+  CPU Average Frame Time: 0.47206ms
+  GPU Average Frame Time: 0.01905ms
 
 PerformanceData\Performance_Loaded_5.json:
-  CPU Average Frame Time: 1.10032ms
-  GPU Average Frame Time: 0.06568ms
+  CPU Average Frame Time: 0.47442ms
+  GPU Average Frame Time: 0.01912ms
 
 PerformanceData\Performance_Loaded_6.json:
-  CPU Average Frame Time: 1.10844ms
-  GPU Average Frame Time: 0.06592ms
+  CPU Average Frame Time: 0.46636ms
+  GPU Average Frame Time: 0.01911ms
 
 PerformanceData\Performance_Loaded_7.json:
-  CPU Average Frame Time: 1.11156ms
-  GPU Average Frame Time: 0.06637ms
+  CPU Average Frame Time: 0.46873ms
+  GPU Average Frame Time: 0.01920ms
 
 PerformanceData\Performance_Loaded_8.json:
-  CPU Average Frame Time: 1.11194ms
-  GPU Average Frame Time: 0.06577ms
+  CPU Average Frame Time: 0.46573ms
+  GPU Average Frame Time: 0.01910ms
 
 PerformanceData\Performance_Loaded_9.json:
-  CPU Average Frame Time: 1.09840ms
-  GPU Average Frame Time: 0.06526ms
+  CPU Average Frame Time: 0.46065ms
+  GPU Average Frame Time: 0.01915ms
 
 
 Final Averages:
-  Final CPU Average Frame Time: 1.09801ms
-  Final GPU Average Frame Time: 0.06569ms
+  Final CPU Average Frame Time: 0.46863ms
+  Final GPU Average Frame Time: 0.01910ms
