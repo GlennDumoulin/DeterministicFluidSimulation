@@ -737,6 +737,12 @@ Wow, the research chapter is taking much longer than I had hoped. It is finally 
 
 The paper is completed and I have done a basic grammatical and spelling check. I might do another one using ChatGPT, for example, this evening if I have some spare time before submitting everything. However, I want to make sure my presentation received some upgrades and the feedback from the test presentation is applied.
 
+Alright, I applied the feedback from the test presentation and adapted the presentation based on the discussion with my supervisor about dropping networking from the equation. It feels like my presentation is a bit too long now, so I might have to tweak things a little or cherry-pick what I want to explain or how far I'll go about certain topics.
+
+This is the last entry for my Learning Log. It's been interesting to keep updating this with experiences and progress updates, but I don't think I will use this again unless I really have to.
+
+Bye!
+
 
 
 ## References overview
