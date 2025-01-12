@@ -167,7 +167,7 @@ For this I used the following sources:
  --> simple and rapid implementation of a fluid dynamics solver for game engines
 
 4. [ChatGPT - Networking Fluid Simulations Unity](https://chatgpt.com/share/6714d670-290c-8002-b4c7-899d8904806a) | Search Terms: /  
- --> Chat with ChatGPT about the non-deterministic floating-point calculations in GPU’s  
+ --> Chat with ChatGPT about the non-deterministic floating-point calculations in GPUs  
  --> Discussing some possible solutions such as fixed-point calculations and buffer streaming
 
 5. [Fixed-point arithmetic](https://en.wikipedia.org/wiki/Fixed-point_arithmetic) | Search Terms: fixed-point arithmetic  
@@ -176,7 +176,7 @@ For this I used the following sources:
 6. [How do fixed-point physics (engines) work?](https://gamedev.stackexchange.com/questions/183953/how-do-fixed-point-physics-engines-work) | Search Terms: fixed point arithmetic in games  
  --> compares fixed-point with floating-point with some warnings for common issues/pitfalls
 
-7. [Decoding Numerical Representation: Floating-Point vs. Fixed-Point Arithmetic in Computing](https://dev.to/mochafreddo/decoding-numerical-representation-floating-point-vs-fixed-point-arithmetic-in-computing-3h46) | Search Terms: fixed point arithmetic in gpu  
+7. [Decoding Numerical Representation: Floating-Point vs. Fixed-Point Arithmetic in Computing](https://dev.to/mochafreddo/decoding-numerical-representation-floating-point-vs-fixed-point-arithmetic-in-computing-3h46) | Search Terms: fixed point arithmetic in GPU  
  --> comparison between floating-point and fixed-point for use-cases, limitations, performance,...
 
 
@@ -674,7 +674,68 @@ After yet another long day of failed attempts, I have decided to take a backup o
 
 It took a decent amount of hours but restarting the fixed-point implementation worked out. I finally got it working, although it should be noted that it's not the correct way of using fixed-point arithmetic. The values are either too large of too small to be representable, I think I know a solution for this problem but it would add a lot more complexity to the fixed-point implementation. The solution I have in mind is to have multiple types of fixed-point structures using different amounts of fractional bits. The added complexity comes with the mathematic operations (+,-,\*,/). These operations require both operands to have the same scaling factor, so there would be extra fixed-point conversions that need to happen before the operations are possible.
 
-Now I don't have time to even try to figure this out, so the method I applied was to not really use fixed-point arithmetic but rather convert all values to a fixed-point and back to a float. This works for rounding values that are too small to be represented, but I'm not sure how deterministic this approach is across different cpu/gpu architectures.
+Now I don't have time to even try to figure this out, so the method I applied was to not really use fixed-point arithmetic but rather convert all values to a fixed-point and back to a float. This works for rounding values that are too small to be represented, but I'm not sure how deterministic this approach is across different CPU/GPU architectures.
+
+
+## 5/01
+
+The final day before my test presentation is upon me. Now that I got some sort of fixed-point implementation working, I want to measure the accuracy and performance of this state of the project. This way I at least have some results to present and discuss at my presentation. After this I will start working on the presentation itself and if I were to have some time afterwards I can still begin with the networking implementation, but looking at my current track record this will very likely not be the case.
+
+Wow, the fixed-point accuracy results are flawless! There are no differences in accuracy at all during any measurement taken. And the impact on performance is the opposite of what I expected, instead of higher average CPU/GPU frame times, the fixed-point results are basically half the times of floating-point results. Did something go wrong? Or is this actually the result?
+
+To test wether my performance measurements went wrong I ran both development builds from floating-point and fixed-point. These dev builds have the Unity Profiler enabled so I can see Unity's official profiling stats for the CPU and GPU. When looking at these stats and comparing both builds with each other, the results for fixed-point are in fact smaller and thus better than the floating-point results. The only idea I might have as to why this unexpected decrease is because I changed the project to a smaller windowed version instead of being fullscreen, this means I will most likely have to repeat all my measurements for floating-point again but I will make a test build first to confirm this idea before immediatly retaking all measurements.
+
+Well damn it, this indeed changes everything. So now I have to redo the floating-point measurements because the current results are basically invalid to use in comparisons against other measurements.
+
+Floating-point measurements are now done again in the same windowed mode and size as the fixed-point measurements. Comparing these results with the fixed-point results is way more in line with what I expected. The performance does not really take a hit, average CPU/GPU frame times stay equal. On the accuracy side decreasing the size of the window also decreased the accuracy errors from floating-point measurements. At least there is still some differences noticeable by analyzing the measurements. I don't have the time today to make yet another change to how I measure the accuracy and redo both again, but now that my window is smaller and thus the amount of pixels in the RenderTextures is smaller, I could increase my sample size to 4/9 instead of 4/16 (25% -> ~44.5%). This increase would give a much better accuracy test but the reason I choose this smaller sample size in the first place was because the saving took a while and I wanted to speed it up. I probably shouldn't have done this in the first place, but the current measurements and results definitely still hold value for this research.
+
+Now it's finally time to make my presentation and prepare myself to present it tomorrow. Hopefully I can at least make something decent with my current research progress.
+
+
+## 6/01
+
+This morning I had my test presentation and it went pretty well, I spend most time of the presentation on explaining fixed-point but this is not a problem because of its importance to the project. I should split the slide up into multiple slides to not overwhelm the audience with info or at least give better visual indications what part I'm talking about.
+
+For the final week of Grad Work I first need to know what I should do now. Should I try to implement networking or should I drop it and rescope my project? I have asked my supervisor and we will have a meeting soon to discuss this.
+
+The meeting was very much needed and as expected I asked for help way to late along the way. Short summary of what we decided on:  
+- Drop networking implementation. This also means I don't need to rewrite stuff from the networking chapter in my Literature Review because I can just remove it completely. Also remove it completely from the presentation.
+- If I can fit it in my planning, try different way of measuring accuracy by saving the RenderTextures to images and comparing those. This way I can also save RenderTexture copies from the state at 5,10 & 20 seconds in one run, and by adding a way to reset the simulation on top of this I can even run all 10 measurements at once. Thus removing the need for saving all the data to text files, and generally automating the currently very manual approach.
+- For the feedback I received on my manuscript draft, I should remove statements like "most common" or "widely-used" unless they can be proven by using references. Also speaking about references I should mention a person who created the SPH method for particle-based simulations, mention that person and reference their work.
+- Another "If I have time"-thing is to maybe see if there are more situations I can research the effects on. What are results when the simulation runs for a few minutes before measuring accuracy? How does the number of fractional bits impact the results?
+
+I had the idea to try to do at least a little work today, but the last few weeks have been overly heavy on me so I decided to just take a break today and continue working tomorrow hopefully refreshing some energy along the way.
+
+
+## 7/01
+
+Woops, I overslept..., and I have a meeting a bit later today to discuss my coding test. I also had some time to think about this last week and I have made the decision to not work on the project itself anymore. What I have now is what I will present, document and deliver. I don't want to take the risk to attempt the new accuracy measurement technique Alex suggested, and end up not getting done with the deliverables in the end.
+
+The meeting is over and they were happy with my coding test and offered me an internship position there. I am glad to be done with the search although I have not accepted the offer yet because I'm still waiting on a reaction from the other company I had a meeting with.
+
+For the remainder of the day I continued working on the manuscript for the first time since the manuscript draft assignment.
+
+
+## 8/01
+
+There will probably not really be a lot to add to my Learning Log from now on, so some entries from these final days may not be present. I will still write some things down when I feel like they are worth mentioning.
+
+A small note to end of this first day. Things have been starting off fairly slowly but I think I'm getting a bit faster at it the further along the process I am. I'm kinda getting the hang of the way of writing and how to formulate certain things in a better way to fit in with the rest of the paper.
+
+
+## 10/01
+
+Today my progress has been a bit slower than the previous days. I did get some new feedback from my supervisor about my updated Research Question and Hypotheses because of the rescope of the project, so I also tried to apply that feedback. At the time of writing this, I still need to write 3 chapters from the paper: research, discussion, and conclusion. It would be great to finish the paper tomorrow so I can fully focus on the presentation and preparing for the presentation on Sunday. However, should I need a bit more time I can still use a part of Sunday to finish things up, which will most likely be the case.
+
+
+## 11/01
+
+Wow, the research chapter is taking much longer than I had hoped. It is finally almost finished, but the last bits I will have to do tomorrow, the day of the deadline, and also write the 2 other chapters: discussion and conclusion. Although, those chapters are much smaller compared to the research chapter, so they should in theory also take less time.
+
+
+## 12/01
+
+The paper is completed and I have done a basic grammatical and spelling check. I might do another one using ChatGPT, for example, this evening if I have some spare time before submitting everything. However, I want to make sure my presentation received some upgrades and the feedback from the test presentation is applied.
 
 
 
@@ -781,7 +842,7 @@ Online Sources:
  --> simple and rapid implementation of a fluid dynamics solver for game engines
 
 22. [ChatGPT - Networking Fluid Simulations Unity](https://chatgpt.com/share/6714d670-290c-8002-b4c7-899d8904806a) | Search Terms: /  
- --> Chat with ChatGPT about the non-deterministic floating-point calculations in GPU’s  
+ --> Chat with ChatGPT about the non-deterministic floating-point calculations in GPUs  
  --> Discussing some possible solutions such as fixed-point calculations and buffer streaming
 
 23. [Fixed-point arithmetic](https://en.wikipedia.org/wiki/Fixed-point_arithmetic) | Search Terms: fixed-point arithmetic  
@@ -790,7 +851,7 @@ Online Sources:
 24. [How do fixed-point physics (engines) work?](https://gamedev.stackexchange.com/questions/183953/how-do-fixed-point-physics-engines-work) | Search Terms: fixed point arithmetic in games  
  --> compares fixed-point with floating-point with some warnings for common issues/pitfalls
 
-25. [Decoding Numerical Representation: Floating-Point vs. Fixed-Point Arithmetic in Computing](https://dev.to/mochafreddo/decoding-numerical-representation-floating-point-vs-fixed-point-arithmetic-in-computing-3h46) | Search Terms: fixed point arithmetic in gpu  
+25. [Decoding Numerical Representation: Floating-Point vs. Fixed-Point Arithmetic in Computing](https://dev.to/mochafreddo/decoding-numerical-representation-floating-point-vs-fixed-point-arithmetic-in-computing-3h46) | Search Terms: fixed point arithmetic in GPU  
  --> comparison between floating-point and fixed-point for use-cases, limitations, performance,...
 
 
